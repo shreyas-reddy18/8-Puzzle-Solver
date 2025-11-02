@@ -4,7 +4,7 @@ CS170 Project 1: 8-Puzzle Solver
 Authors: Shreyas, Rishith, Rehan
 """
 
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 from copy import deepcopy
 
 class PuzzleState:
@@ -69,3 +69,38 @@ class PuzzleState:
     def to_tuple(self) -> Tuple:
         """Convert grid to tuple for hashing and comparison."""
         return tuple(tuple(row) for row in self.grid)
+
+class Node:
+    """Represents a node in the search tree."""
+    
+    def __init__(self, state: PuzzleState, parent: Optional['Node'] = None, 
+                 action: str = "", path_cost: int = 0):
+        """
+        Initialize a search node.
+        
+        Args:
+            state: The puzzle state at this node
+            parent: Parent node (None for root)
+            action: Action taken to reach this state
+            path_cost: Cost from root to this node (g(n))
+        """
+        self.state = state
+        self.parent = parent
+        self.action = action
+        self.path_cost = path_cost
+        self.depth = 0 if parent is None else parent.depth + 1
+    
+    def get_solution_path(self) -> List[str]:
+        """Reconstruct the solution path from root to this node."""
+        path = []
+        current = self
+        
+        while current.parent is not None:
+            path.append(current.action)
+            current = current.parent
+        
+        return list(reversed(path))
+    
+    def __lt__(self, other) -> bool:
+        """For priority queue comparison."""
+        return False
