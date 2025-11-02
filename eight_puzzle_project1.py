@@ -46,3 +46,29 @@ class Problem:
                 if state[i][j] == 0:
                     return i, j
         return None
+
+    def get_successors(self, state):
+        """Generate all valid successor states"""
+        successors = []
+        blank_row, blank_col = self.find_blank(state)
+        # Possible moves: UP, DOWN, LEFT, RIGHT
+        moves = {
+            'UP': (-1, 0),
+            'DOWN': (1, 0),
+            'LEFT': (0, -1),
+            'RIGHT': (0, 1)
+        }
+        
+        for action, (dr, dc) in moves.items():
+            new_row, new_col = blank_row + dr, blank_col + dc
+            
+            # Check if move is valid
+            if 0 <= new_row < 3 and 0 <= new_col < 3:
+                # Create new state by swapping blank with adjacent tile
+                new_state = deepcopy(state)
+                new_state[blank_row][blank_col] = new_state[new_row][new_col]
+                new_state[new_row][new_col] = 0
+                
+                successors.append((new_state, action))
+        
+        return successors
