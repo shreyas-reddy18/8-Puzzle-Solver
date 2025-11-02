@@ -39,4 +39,10 @@ class Problem:
         """Check if state is the goal state"""
         return state == self.goal_state
     
-    
+    def find_blank(self, state):
+        """Find the position of the blank (0) in the puzzle"""
+        for i in range(3):
+            for j in range(3):
+                if state[i][j] == 0:
+                    return i, j
+        return None
