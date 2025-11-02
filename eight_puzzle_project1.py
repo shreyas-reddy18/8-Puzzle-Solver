@@ -29,3 +29,14 @@ class Node:
         return hash(str(self.state))
 
 class Problem:
+    """Represents the Eight-Puzzle problem"""
+    def __init__(self, initial_state, goal_state=None):
+        self.initial_state = initial_state
+        self.goal_state = goal_state if goal_state else [[1, 2, 3], [4, 5, 6], [7, 8, 0]]
+        self.operators = ['UP', 'DOWN', 'LEFT', 'RIGHT']
+    
+    def is_goal(self, state):
+        """Check if state is the goal state"""
+        return state == self.goal_state
+    
+    
