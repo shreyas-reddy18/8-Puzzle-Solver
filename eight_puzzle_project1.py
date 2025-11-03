@@ -1,7 +1,7 @@
 """
 CS170 Project 1: 8-Puzzle Solver
 
-Authors: Shreyas, Rishith, Rehan
+Authors: Shreyas, Rishabh, Rehan
 """
 
 import math
@@ -275,3 +275,34 @@ def get_user_input():
     
     # Returns the puzzle configuration chosen and the heuristic that was chosen
     return initial_state, heuristic
+
+def main():
+    """Main function"""
+    # Get user input
+    initial_state, heuristic = get_user_input()
+    
+    # Check if puzzle is solvable
+    if not is_solvable(initial_state):
+        print("\nThis puzzle is not solvable! Please try a different initial state.")
+        return
+    
+    # Create problem instance
+    problem = Problem(initial_state)
+    
+    # Run search
+    solution, nodes_expanded, max_queue = general_search(problem, heuristic)
+    
+    # Optional: Print solution path (extra credit)
+    if solution and len(solution) > 0:
+        print("\n" + "="*50)
+        print("Solution Path (Extra Credit):")
+        print("="*50)
+        print("\nInitial State:")
+        print_state(problem.initial_state)
+        
+        for i, (action, state) in enumerate(solution):
+            print(f"\nStep {i+1}: {action}")
+            print_state(state)
+
+if __name__ == "__main__":
+    main()
