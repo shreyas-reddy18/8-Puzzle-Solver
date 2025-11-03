@@ -202,3 +202,14 @@ def general_search(problem, heuristic='uniform'):
     
     print("No solution found!")
     return None, nodes_expanded, max_queue_size
+
+
+def reconstruct_path(node):
+    """Reconstruct the solution path from goal to start"""
+    path = []
+    current = node
+    while current.parent is not None:
+        path.append((current.action, current.state))
+        current = current.parent
+    path.reverse()
+    return path
