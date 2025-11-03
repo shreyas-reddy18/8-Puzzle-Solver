@@ -105,3 +105,37 @@ class Problem:
             # Otherwise convert the tile number to a string to create a list of string values
             # Join the values of the list to create the row with spaces in between
             print(' '.join(['b' if x == 0 else str(x) for x in row]))
+
+
+def general_search(problem, heuristic='uniform'):
+    """
+    General A* search algorithm
+    heuristic options: 'uniform', 'misplaced', 'euclidean'
+    """
+    # Final values
+    nodes_expanded = 0
+    max_queue_size = 0
+    
+    # Choose heuristic function
+    if heuristic == 'uniform':
+        h_func = lambda state: 0
+    elif heuristic == 'misplaced':
+        h_func = problem.misplaced_tile_heuristic
+    elif heuristic == 'euclidean':
+        h_func = problem.euclidean_distance_heuristic
+    else:
+        raise ValueError("Invalid heuristic")
+    
+    # Initialize
+    initial_h = h_func(problem.initial_state)
+    initial_node = Node(problem.initial_state, None, None, 0, initial_h)
+    
+    frontier = [initial_node]  # Priority queue
+    heapq.heapify(frontier)
+    
+    visited = set()  # To avoid revisiting states
+    
+    # Print initial state
+    print("\nExpanding state")
+    print_state(problem.initial_state)
+    print()
