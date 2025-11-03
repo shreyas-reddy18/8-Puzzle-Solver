@@ -4,6 +4,7 @@ CS170 Project 1: 8-Puzzle Solver
 Authors: Shreyas, Rishith, Rehan
 """
 
+import math
 from typing import List, Tuple, Optional
 from copy import deepcopy
 
@@ -82,3 +83,17 @@ class Problem:
                 if state[i][j] != 0 and state[i][j] != self.goal_state[i][j]:
                     misplaced += 1
         return misplaced
+    
+    def euclidean_distance_heuristic(self, state):
+        """Calculate Euclidean distance of tiles from goal positions"""
+        distance = 0 # Initialize the total distance to 0
+        for i in range(3):
+            for j in range(3):
+                if state[i][j] != 0: # Skip 0 because it does not need to move towards any goal tile
+                    value = state[i][j] # The tile number (1-8)
+                    goal_row = (value - 1) // 3 # To find goal row
+                    goal_col = (value - 1) % 3 # To find goal column
+                    
+                    distance += math.sqrt((i - goal_row)**2 + (j - goal_col)**2) # Calculate Euclidean distance
+    
+        return distance
