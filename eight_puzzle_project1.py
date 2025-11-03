@@ -51,12 +51,12 @@ class Problem:
         """Generate all valid successor states"""
         successors = []
         blank_row, blank_col = self.find_blank(state)
-        # Possible moves: UP, DOWN, LEFT, RIGHT
+        # Possible moves: LEFT, RIGHT, UP, DOWN
         moves = {
-            'UP': (-1, 0),
-            'DOWN': (1, 0),
             'LEFT': (0, -1),
-            'RIGHT': (0, 1)
+            'RIGHT': (0, 1),
+            'UP': (-1, 0),
+            'DOWN': (1, 0)
         }
         
         for action, (dr, dc) in moves.items():
