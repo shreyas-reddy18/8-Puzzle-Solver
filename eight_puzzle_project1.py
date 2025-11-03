@@ -99,13 +99,13 @@ class Problem:
     
         return distance
 
-    def print_state(state):
-        """Print the puzzle state in a readable format"""
-        for row in state: # Loop through each row
-            # If the tile value is 0, replace it with b to show a blank space
-            # Otherwise convert the tile number to a string to create a list of string values
-            # Join the values of the list to create the row with spaces in between
-            print(' '.join(['b' if x == 0 else str(x) for x in row]))
+def print_state(state):
+    """Print the puzzle state in a readable format"""
+    for row in state: # Loop through each row
+        # If the tile value is 0, replace it with b to show a blank space
+        # Otherwise convert the tile number to a string to create a list of string values
+        # Join the values of the list to create the row with spaces in between
+        print(' '.join(['b' if x == 0 else str(x) for x in row]))
 
 
 def general_search(problem, heuristic='uniform'):
@@ -229,3 +229,49 @@ def is_solvable(state):
     
     # Puzzle is solvable if inversions are even
     return inversions % 2 == 0
+
+def get_user_input():
+    """Get puzzle configuration from user"""
+    print("Welcome to Rishabh, Rehan, and Shreyas's 8 puzzle solver.")  # Display a welcome message
+    print('Type "1" to use a default puzzle, or "2" to enter your own puzzle.') # Prompt the user for input options
+    
+    choice = input().strip() # Read the user's choice and remove the whitespace
+    
+    if choice == '1': # Option 1 is using a default puzzle
+        initial_state = [[1, 2, 3], [4, 8, 0], [7, 6, 5]]
+    else: # Option 2 is the user inputs his own puzzle
+        print("\nEnter your puzzle, use a zero to represent the blank")
+        initial_state = [] # Initialize an empty list to store the three puzzle rows
+        
+        # Each input line is split into numbers, converted to integers, and added to the state
+        row1 = input("Enter the first row, use space or tabs between numbers ")
+        initial_state.append([int(x) for x in row1.split()])
+        
+        row2 = input("Enter the second row, use space or tabs between numbers ")
+        initial_state.append([int(x) for x in row2.split()])
+        
+        row3 = input("Enter the third row, use space or tabs between numbers ")
+        initial_state.append([int(x) for x in row3.split()])
+    
+    # After puzzle input, ask the user which algorithm they want to use
+    print("\nEnter your choice of algorithm")
+    print("1. Uniform Cost Search")
+    print("2. A* with the Misplaced Tile heuristic.")
+    print("3. A* with the Euclidean distance heuristic.")
+    print()
+    
+    # Read the user's selection
+    algo_choice = input().strip()
+    
+    # Map the number choice to the algorithm name
+    heuristic_map = {
+        '1': 'uniform', # Uniform cost search
+        '2': 'misplaced', # A* using number of misplaced tiles
+        '3': 'euclidean' # A* using Euclidean distance heuristic
+    }
+    
+    # Get the number chosen by the user and make "uniform" the default choice
+    heuristic = heuristic_map.get(algo_choice, 'uniform')
+    
+    # Returns the puzzle configuration chosen and the heuristic that was chosen
+    return initial_state, heuristic
