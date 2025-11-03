@@ -213,3 +213,19 @@ def reconstruct_path(node):
         current = current.parent
     path.reverse()
     return path
+
+
+def is_solvable(state):
+    """Check if puzzle is solvable using inversion count"""
+    # Flatten the puzzle, excluding the blank
+    flat = [val for row in state for val in row if val != 0]
+    
+    # Count inversions
+    inversions = 0
+    for i in range(len(flat)):
+        for j in range(i + 1, len(flat)):
+            if flat[i] > flat[j]:
+                inversions += 1
+    
+    # Puzzle is solvable if inversions are even
+    return inversions % 2 == 0
