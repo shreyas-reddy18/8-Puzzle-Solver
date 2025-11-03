@@ -5,6 +5,7 @@ Authors: Shreyas, Rishith, Rehan
 """
 
 import math
+import heapq
 from typing import List, Tuple, Optional
 from copy import deepcopy
 
@@ -139,3 +140,65 @@ def general_search(problem, heuristic='uniform'):
     print("\nExpanding state")
     print_state(problem.initial_state)
     print()
+
+    while frontier:
+        # Track max queue size
+        max_queue_size = max(max_queue_size, len(frontier))
+        
+        # Get node with lowest f(n) = g(n) + h(n)
+        current_node = heapq.heappop(frontier) # Use heapq.heappop to find the lowest value in O(log n) time
+        
+        # Convert state to tuple for hashing
+        state_tuple = tuple(tuple(row) for row in current_node.state)
+        
+        # Skip if already visited
+        if state_tuple in visited:
+            continue
+        
+        visited.add(state_tuple)
+        
+        # Check if goal
+        if problem.is_goal(current_node.state):
+            print("Goal!!!")
+            print()
+            print(f"To solve this problem the search algorithm expanded a total of {nodes_expanded} nodes.")
+            print(f"The maximum number of nodes in the queue at any one time: {max_queue_size}.")
+            print(f"The depth of the goal node was {current_node.depth}.")
+            
+            # Return solution path
+            return reconstruct_path(current_node), nodes_expanded, max_queue_size
+        
+        # Expand node
+        nodes_expanded += 1
+        
+        for successor_state, action in problem.get_successors(current_node.state):
+            successor_tuple = tuple(tuple(row) for row in successor_state)
+            
+            if successor_tuple not in visited:
+                g_n = current_node.depth + 1  # Cost from start
+                h_n = h_func(successor_state)  # Heuristic
+                f_n = g_n + h_n  # Total cost
+                
+                successor_node = Node(successor_state, current_node, action, g_n, f_n)
+                heapq.heappush(frontier, successor_node)
+        
+        # After expanding, show the best state to expand next
+        if frontier:
+            # Peek at the best node without removing it
+            best_node = min(frontier)
+            g_n = best_node.depth
+            h_n = best_node.cost - best_node.depth
+            
+            # Format h(n) - show as int if it's a whole number, otherwise 1 decimal
+            if h_n == int(h_n):
+                h_n_str = str(int(h_n))
+            else:
+                h_n_str = f"{h_n:.1f}"
+            
+            print(f"The best state to expand with g(n) = {g_n} and h(n) = {h_n_str} is...")
+            print_state(best_node.state)
+            print("Expanding this node...")
+            print()
+    
+    print("No solution found!")
+    return None, nodes_expanded, max_queue_size
