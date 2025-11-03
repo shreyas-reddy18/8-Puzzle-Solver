@@ -97,3 +97,11 @@ class Problem:
                     distance += math.sqrt((i - goal_row)**2 + (j - goal_col)**2) # Calculate Euclidean distance
     
         return distance
+
+    def print_state(state):
+        """Print the puzzle state in a readable format"""
+        for row in state: # Loop through each row
+            # If the tile value is 0, replace it with b to show a blank space
+            # Otherwise convert the tile number to a string to create a list of string values
+            # Join the values of the list to create the row with spaces in between
+            print(' '.join(['b' if x == 0 else str(x) for x in row]))
