@@ -72,3 +72,13 @@ class Problem:
                 successors.append((new_state, action))
         
         return successors
+
+
+    def misplaced_tile_heuristic(self, state):
+        """Count number of misplaced tiles (excluding blank)"""
+        misplaced = 0
+        for i in range(3):
+            for j in range(3):
+                if state[i][j] != 0 and state[i][j] != self.goal_state[i][j]:
+                    misplaced += 1
+        return misplaced
